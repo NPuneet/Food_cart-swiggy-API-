@@ -1,16 +1,43 @@
 import RestaurantCard from "./Card";
-import { restaurantList } from "./Config";
-import React, { useState } from "react";
+import { swiggy_api_URL } from "./Config";
+import React, { useState, useEffect } from "react";
+import Shimmer from "./Shimmer";
+import useOnline from "./utils/useOnline";
+
 const Body = () => {
-  const [searchText, SetsearchText] = useState();
-  const [reslist] = useState(restaurantList);
-  const [filterList, SetFilterList] = useState(restaurantList);
+  const [searchText, SetsearchText] = useState("");
+  const [filterList, SetFilterList] = useState([]);
+  const [reslist, setResList] = useState([]);
+  
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const statuss = useOnline();
+  const fetchData = async () => {
+    const data = await fetch(swiggy_api_URL);
+    const json = await data.json();
+    setResList(
+      json?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+    );
+    SetFilterList(
+      json?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+    );
+  };
+
   function abc(searchText, reslist) {
     return reslist.filter((restaurant) =>
-      restaurant.data.name.toUpperCase().includes(searchText.toUpperCase())
+      restaurant.info.name.toUpperCase().includes(searchText.toUpperCase())
     );
   }
-  return (
+  
+
+  return statuss === false ? (
+    <h1>Sher ka internet band hai jab on hoga tab sher firse ayega</h1>
+  ) :
+  reslist.length === 0 ? (
+    <Shimmer />
+  ) : (
     <>
       <div>
         <input
@@ -31,10 +58,8 @@ const Body = () => {
         </button>
       </div>
       <div className="restaurant-list">
-        {filterList.map((restaurant) => {
-          return (
-            <RestaurantCard key={restaurant.data.id} {...restaurant.data} />
-          );
+        {filterList.map((restaurant, i) => {
+          return <RestaurantCard key={i} {...restaurant?.info} />;
         })}
       </div>
     </>

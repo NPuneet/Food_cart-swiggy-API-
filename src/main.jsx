@@ -1,14 +1,23 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom/client";
+import { RouterProvider, createBrowserRouter, Outlet } from "react-router-dom";
 import "./index.css";
-import { RouterProvider } from "react-router-dom";
-import AppLayout from "./App";
-import About from "./Components/About";
 import Error from "./Components/Error";
-import Contact from "./Components/Contact";
 import Body from "./Components/Body";
-import { createBrowserRouter } from "react-router-dom";
+import Header from "./Components/Header";
+import Footer from "./Components/Footer";
 import Gg from "./Components/Restaurent";
+const AppLayout = () => {
+  return (
+    <>
+      <Header />
+      <Outlet />
+      <Footer />
+    </>
+  );
+};
+const About = lazy(() => import("./Components/About"));
+const Contact = lazy(() => import("./Components/Contact"));
 
 const myRouter = createBrowserRouter([
   {
@@ -21,11 +30,19 @@ const myRouter = createBrowserRouter([
       },
       {
         path: "/about",
-        element: <About />,
+        element: (
+          <Suspense fallback={<h1>DEKHO GUYS HUM H LAZY BOYS</h1>}>
+            <About />
+          </Suspense>
+        ),
       },
       {
         path: "/contact",
-        element: <Contact />,
+        element: (
+          <Suspense fallback={<h1>DEKHO GUYS HUM H LAZY BOYS</h1>}>
+            <Contact />
+          </Suspense>
+        ),
       },
       {
         path: "/restaurent/:resid",
