@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import iAmContext from "./utils/Context";
-// import { imageUrl } from "./Config";
+import { imageUrl } from "./Config";
 import { clearCart } from "./utils/appSlice";
 const Cart = () => {
   const data = useContext(iAmContext);
@@ -20,7 +20,7 @@ const Cart = () => {
           <>
             <div className="card">
               <h2>{a.name}</h2>
-              {/* <img src={ imageUrl + cloudinaryImageId} />; */}
+              <img src={ imageUrl + a.cloudinaryImageId} />;
               <h5>{a.costForTwo}</h5>
             </div>
           </>
