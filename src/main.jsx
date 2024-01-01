@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useContext, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter, Outlet } from "react-router-dom";
 import "./index.css";
@@ -7,12 +7,28 @@ import Body from "./Components/Body";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import Gg from "./Components/Restaurent";
+import iAmContext from "./Components/utils/Context";
+import { Provider } from "react-redux";
+import store from "./Components/utils/Store";
+import Cart from "./Components/Cart";
+
+
 const AppLayout = () => {
+  const data = useContext(iAmContext)
+  const [mushi, setMushi] = useState();
+  useEffect(()=>{
+
+    setMushi(data.name)
+  }, [])
   return (
     <>
-      <Header />
-      <Outlet />
+    <Provider store={store}>
+      <iAmContext.Provider value={{ name: mushi , setMushi }}>
+        <Header />
+        <Outlet />
       <Footer />
+      </iAmContext.Provider>
+      </Provider>
     </>
   );
 };
@@ -41,6 +57,14 @@ const myRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<h1>DEKHO GUYS HUM H LAZY BOYS</h1>}>
             <Contact />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/cart",
+        element: (
+          <Suspense fallback={<h1>DEKHO GUYS HUM H LAZY BOYS</h1>}>
+            <Cart/>
           </Suspense>
         ),
       },
