@@ -20,7 +20,7 @@ const Cart = () => {
           <>
             <div className="card">
               <h2>{a.name}</h2>
-              <img src={ imageUrl + a.cloudinaryImageId} />;
+              <img src={ imageUrl + a.cloudinaryImageId} />
               <h5>{a.costForTwo}</h5>
             </div>
           </>
